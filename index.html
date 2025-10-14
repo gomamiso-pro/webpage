@@ -1,167 +1,185 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Webシステム設計・見積支援ツール v3</title>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<style>
-  body {
-    font-family: "Segoe UI", sans-serif;
-    padding: 10px;
-    background: #f5f7fa;
-    max-width: 600px;
-    margin: auto;
-  }
-  h1 { text-align: center; color: #333; font-size: 1.4em; }
-  section {
-    background: #fff; padding: 15px; border-radius: 10px;
-    margin-top: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.9em; }
-  select, textarea {
-    width: 100%; margin-top: 5px; margin-bottom: 10px;
-    padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.9em;
-  }
-  button {
-    width: 100%; background: #0078d4; color: white;
-    border: none; padding: 10px; border-radius: 6px;
-    cursor: pointer; font-size: 1em; margin-top: 10px;
-  }
-  button:hover { background: #005fa3; }
-  .result { background: #fff; padding: 15px; border-radius: 10px; margin-top: 20px; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
-  th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
-  th { background: #f0f0f0; }
-  .price { text-align: right; }
-  .mermaid { background: #fff; border-radius: 8px; padding: 10px; margin-top: 10px; }
-  #previewFrame { width: 100%; height: 250px; border: 1px solid #ccc; border-radius: 8px; margin-top: 10px; }
-</style>
+  <meta charset="UTF-8">
+  <title>スマホ対応 Web設計・見積支援ツール</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      font-family: "Hiragino Sans", "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 10px;
+      background: #f7f7f7;
+    }
+    h1 { text-align: center; color: #333; font-size: 1.4rem; }
+    section { background: #fff; padding: 15px; border-radius: 12px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.9rem; }
+    select, input, textarea {
+      width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #ccc;
+      font-size: 0.9rem;
+    }
+    button {
+      width: 100%; background: #0078d4; color: white; border: none;
+      padding: 12px; border-radius: 8px; margin-top: 15px;
+      font-size: 1rem;
+    }
+    button:hover { background: #005fa3; }
+    .result { background: #fff; padding: 15px; border-radius: 10px; margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; padding: 6px; }
+    th { background: #efefef; }
+    .price { text-align: right; }
+  </style>
 </head>
 <body>
-<h1>📱 Web設計・見積支援ツール v3</h1>
+  <h1>📱 Web設計・見積サポートツール</h1>
 
-<section>
-  <label>システム種別</label>
-  <select id="systemType">
-    <option value="ECサイト" data-price="200000">ECサイト（¥200,000）</option>
-    <option value="予約システム" data-price="250000">予約システム（¥250,000）</option>
-    <option value="社内管理ツール" data-price="180000">社内管理ツール（¥180,000）</option>
-    <option value="ポータルサイト" data-price="220000">ポータルサイト（¥220,000）</option>
-  </select>
+  <section>
+    <h2>ヒアリングシート</h2>
 
-  <label>主要機能</label>
-  <select id="featureSet" multiple size="5">
-    <option value="ログイン認証" data-price="30000">ログイン認証（¥30,000）</option>
-    <option value="ユーザー管理" data-price="40000">ユーザー管理（¥40,000）</option>
-    <option value="検索・一覧表示" data-price="35000">検索・一覧表示（¥35,000）</option>
-    <option value="登録・編集" data-price="40000">登録・編集（¥40,000）</option>
-    <option value="レポート出力" data-price="50000">レポート出力（¥50,000）</option>
-    <option value="通知・メール送信" data-price="30000">通知・メール送信（¥30,000）</option>
-    <option value="ダッシュボード" data-price="45000">ダッシュボード（¥45,000）</option>
-  </select>
+    <label>システム種別</label>
+    <select id="systemType">
+      <option value="ECサイト">ECサイト</option>
+      <option value="予約システム">予約システム</option>
+      <option value="社内管理">社内管理</option>
+      <option value="ポータルサイト">ポータルサイト</option>
+    </select>
 
-  <label>ユーザー規模</label>
-  <select id="scale">
-    <option value="small" data-multiplier="1.0">少人数（〜100名）</option>
-    <option value="medium" data-multiplier="1.3">中規模（〜1,000名）</option>
-    <option value="large" data-multiplier="1.6">大規模（1,000名以上）</option>
-  </select>
+    <label>ターゲット層</label>
+    <select id="target">
+      <option>一般ユーザー</option>
+      <option>法人</option>
+      <option>学生・教育系</option>
+      <option>高齢者向け</option>
+    </select>
 
-  <label>特記事項</label>
-  <textarea id="notes" rows="2" placeholder="要望、制約、外部連携など"></textarea>
+    <label>使用言語</label>
+    <select id="lang">
+      <option>HTML / CSS / JavaScript</option>
+      <option>React / Node.js</option>
+      <option>PHP / Laravel</option>
+      <option>Python / Django</option>
+    </select>
 
-  <button onclick="generateAll()">設計書・見積を生成</button>
-  <button onclick="downloadPDF()">📄 PDF出力</button>
-</section>
+    <label>レイアウトイメージ</label>
+    <select id="layout">
+      <option>1カラム（スマホ中心）</option>
+      <option>2カラム（PC・タブレット両対応）</option>
+      <option>カード型デザイン</option>
+    </select>
 
-<section class="result" id="output"></section>
+    <label>フォント</label>
+    <select id="font">
+      <option>サンセリフ（すっきり）</option>
+      <option>明朝体（上品）</option>
+      <option>丸ゴシック（親しみやすい）</option>
+    </select>
 
-<section>
-  <h3>🧪 コードプレビュー</h3>
-  <textarea id="codeInput" rows="5" placeholder="ここにHTMLコードを貼り付けてプレビュー"></textarea>
-  <button onclick="previewCode()">プレビュー表示</button>
-  <iframe id="previewFrame"></iframe>
-</section>
+    <label>色味</label>
+    <select id="color">
+      <option>ブルー系（信頼・誠実）</option>
+      <option>グリーン系（安心・健康）</option>
+      <option>オレンジ系（明るい・元気）</option>
+      <option>モノトーン（落ち着き）</option>
+    </select>
 
-<script>
-  mermaid.initialize({ startOnLoad: false });
+    <label>雰囲気</label>
+    <select id="tone">
+      <option>シンプル</option>
+      <option>ポップ</option>
+      <option>クール</option>
+      <option>ナチュラル</option>
+    </select>
 
-  function generateAll() {
-    const sysSel = document.getElementById("systemType");
-    const sysType = sysSel.value;
-    const basePrice = parseInt(sysSel.selectedOptions[0].dataset.price);
-    const features = Array.from(document.getElementById("featureSet").selectedOptions)
-      .map(o => ({ name: o.value, price: parseInt(o.dataset.price) }));
-    const scaleSel = document.getElementById("scale");
-    const scaleText = scaleSel.options[scaleSel.selectedIndex].text;
-    const mult = parseFloat(scaleSel.selectedOptions[0].dataset.multiplier);
-    const notes = document.getElementById("notes").value;
+    <label>ページ構成</label>
+    <select id="pages" multiple size="4">
+      <option>トップページ</option>
+      <option>商品一覧 / 投稿一覧</option>
+      <option>詳細ページ</option>
+      <option>お問い合わせ / 管理画面</option>
+    </select>
 
-    let subtotal = basePrice;
-    features.forEach(f => subtotal += f.price);
-    const total = Math.round(subtotal * mult);
+    <label>想定機能</label>
+    <div id="featureList">
+      <label><input type="checkbox" value="ログイン">ログイン</label>
+      <label><input type="checkbox" value="検索">検索</label>
+      <label><input type="checkbox" value="登録・編集">登録・編集</label>
+      <label><input type="checkbox" value="コメント">コメント</label>
+      <label><input type="checkbox" value="通知">通知</label>
+      <label><input type="checkbox" value="分析">分析</label>
+    </div>
 
-    // 概要
-    let summary = `<h3>📘 システム概要</h3>
-    <p><strong>${sysType}</strong>を構築。ユーザー規模：${scaleText}</p>
-    <ul>${features.map(f => `<li>${f.name}</li>`).join("")}</ul>`;
+    <label>テーブル数</label>
+    <input type="number" id="tableCount" min="1" max="30" value="5">
 
-    // 明細表
-    let detail = `<h3>💰 見積明細</h3><table>
-    <tr><th>項目</th><th class="price">金額（円）</th></tr>
-    <tr><td>${sysType} 基本構築費</td><td class="price">${basePrice.toLocaleString()}</td></tr>
-    ${features.map(f => `<tr><td>${f.name}</td><td class="price">${f.price.toLocaleString()}</td></tr>`).join("")}
-    <tr><td>規模調整 (${scaleText})</td><td class="price">×${mult}</td></tr>
-    <tr><th>概算見積金額</th><th class="price">${total.toLocaleString()}</th></tr></table>`;
+    <button onclick="generateAll()">設計・見積を作成</button>
+  </section>
 
-    // テーブル設計（具体化）
-    let tableDef = `<h3>🗂️ テーブル設計</h3>`;
-    tableDef += features.map((f, i) => {
-      const name = f.name.replace(/[^\w\u3000-\u9fff]/g, "").replace(/\s/g, "_").toLowerCase();
-      const columns = [
-        { n: "id", t: "INT", r: "PK" },
-        { n: "created_at", t: "DATETIME", r: "必須" },
-        { n: "updated_at", t: "DATETIME", r: "必須" },
-        { n: name + "_name", t: "VARCHAR(100)", r: "必須" },
-        { n: name + "_desc", t: "TEXT", r: "任意" },
-      ];
-      return `<h4>${i+1}. ${f.name}</h4>
-      <table><tr><th>項目名</th><th>型</th><th>制約</th></tr>
-      ${columns.map(c => `<tr><td>${c.n}</td><td>${c.t}</td><td>${c.r}</td></tr>`).join("")}</table>`;
-    }).join("");
+  <section class="result" id="output"></section>
 
-    // Mermaid構造図
-    let diagram = `graph TD;
-      A[ユーザー] --> B[${sysType}];
-      ${features.map((f,i)=>`B --> F${i}(${f.name})`).join(" ")}`;
-    let mermaidHtml = `<h3>🧭 システム構造図</h3><div class="mermaid">${diagram}</div>`;
+  <script>
+    mermaid.initialize({ startOnLoad: false });
 
-    const memo = notes ? `<h3>📝 備考</h3><p>${notes}</p>` : "";
+    function generateAll() {
+      const systemType = document.getElementById("systemType").value;
+      const target = document.getElementById("target").value;
+      const lang = document.getElementById("lang").value;
+      const layout = document.getElementById("layout").value;
+      const font = document.getElementById("font").value;
+      const color = document.getElementById("color").value;
+      const tone = document.getElementById("tone").value;
+      const pages = Array.from(document.getElementById("pages").selectedOptions).map(o => o.value);
+      const features = Array.from(document.querySelectorAll("#featureList input:checked")).map(f => f.value);
+      const tableCount = parseInt(document.getElementById("tableCount").value);
 
-    document.getElementById("output").innerHTML =
-      summary + detail + tableDef + mermaidHtml + memo;
+      const base = 150000;
+      const perFeature = 30000;
+      const perTable = 10000;
+      const subtotal = base + features.length * perFeature + tableCount * perTable;
+      const total = subtotal * 1.1;
 
-    mermaid.init(undefined, document.querySelectorAll(".mermaid"));
-  }
+      // 概要
+      let html = `<h3>📘 システム概要</h3>
+        <p>${systemType}（ターゲット：${target}）<br>
+        使用言語：${lang}<br>
+        レイアウト：${layout} / フォント：${font}<br>
+        カラー：${color} / 雰囲気：${tone}</p>`;
 
-  function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ unit: "pt", format: "a4" });
-    pdf.html(document.getElementById("output"), {
-      callback: function (pdf) {
-        pdf.save("web_system_design.pdf");
-      },
-      x: 20, y: 20, width: 560
-    });
-  }
+      // 機能一覧
+      html += `<h3>🧩 機能一覧</h3><table><tr><th>No</th><th>機能名</th><th>概要</th></tr>`;
+      features.forEach((f, i) => html += `<tr><td>${i+1}</td><td>${f}</td><td>${f}に関する機能</td></tr>`);
+      html += `</table>`;
 
-  function previewCode() {
-    const code = document.getElementById("codeInput").value;
-    const frame = document.getElementById("previewFrame");
-    frame.srcdoc = code;
-  }
-</script>
+      // テーブル設計
+      html += `<h3>🗂️ テーブル設計（仮）</h3><table><tr><th>No</th><th>テーブル名</th><th>主な項目</th></tr>`;
+      for (let i=0;i<tableCount;i++){
+        const name = features[i % features.length] || `汎用データ`;
+        html += `<tr><td>${i+1}</td><td>${name}_tbl</td><td>id, ${name}_name, updated_at</td></tr>`;
+      }
+      html += `</table>`;
+
+      // 見積明細
+      html += `<h3>💰 見積明細</h3>
+        <table>
+        <tr><th>項目</th><th>単価</th><th>数量</th><th>小計</th></tr>
+        <tr><td>基本設計費</td><td class="price">150,000</td><td>1</td><td class="price">150,000</td></tr>
+        <tr><td>機能実装</td><td class="price">30,000</td><td>${features.length}</td><td class="price">${features.length * 30000}</td></tr>
+        <tr><td>DB設計</td><td class="price">10,000</td><td>${tableCount}</td><td class="price">${tableCount * 10000}</td></tr>
+        <tr><th colspan="3">合計（税抜）</th><th class="price">${subtotal.toLocaleString()}</th></tr>
+        <tr><th colspan="3">税込</th><th class="price">${Math.round(total).toLocaleString()} 円</th></tr>
+        </table>`;
+
+      // 画面遷移図
+      let mermaidCode = "graph TD;\n";
+      pages.forEach((p,i) => {
+        if (i < pages.length - 1) mermaidCode += `${p}-->${pages[i+1]}\n`;
+      });
+      html += `<h3>🧭 画面遷移図</h3><div class="mermaid">${mermaidCode}</div>`;
+
+      document.getElementById("output").innerHTML = html;
+      mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+    }
+  </script>
 </body>
 </html>
