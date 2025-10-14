@@ -2,109 +2,144 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>簡易Web設計・見積支援ツール</title>
+  <title>Webシステム設計・見積支援ツール v2</title>
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
       padding: 20px;
       max-width: 900px;
       margin: auto;
-      background: #f7f7f7;
+      background: #f5f7fa;
     }
     h1 { text-align: center; color: #333; }
-    h2 { border-bottom: 2px solid #ccc; padding-bottom: 4px; margin-top: 40px; }
-    section { background: #fff; padding: 20px; border-radius: 10px; margin-top: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    label { display: block; margin-top: 10px; }
-    input, select, textarea { width: 100%; margin-top: 5px; margin-bottom: 15px; padding: 8px; }
+    h2 { border-bottom: 2px solid #ccc; margin-top: 30px; padding-bottom: 5px; }
+    section {
+      background: #fff; padding: 20px; border-radius: 10px;
+      margin-top: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    select, textarea {
+      width: 100%; margin-top: 5px; margin-bottom: 10px;
+      padding: 8px; border-radius: 6px; border: 1px solid #ccc;
+    }
     button {
       background: #0078d4; color: white; border: none;
       padding: 10px 20px; border-radius: 6px; cursor: pointer;
+      font-size: 15px;
     }
     button:hover { background: #005fa3; }
     .result { background: #fff; padding: 20px; border-radius: 10px; margin-top: 30px; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     th { background: #f0f0f0; }
+    .price { text-align: right; }
   </style>
 </head>
 <body>
-  <h1>🌐 Webシステム設計・見積支援ツール</h1>
+  <h1>🌐 Webシステム設計・見積支援ツール v2</h1>
 
   <section>
-    <h2>1️⃣ ヒアリングシート</h2>
+    <h2>1️⃣ ヒアリングシート（選択式）</h2>
 
     <label>システム種別</label>
     <select id="systemType">
-      <option value="ECサイト">ECサイト</option>
-      <option value="予約システム">予約システム</option>
-      <option value="社内管理ツール">社内管理ツール</option>
-      <option value="ポータルサイト">ポータルサイト</option>
+      <option value="ECサイト" data-price="200000">ECサイト（¥200,000）</option>
+      <option value="予約システム" data-price="250000">予約システム（¥250,000）</option>
+      <option value="社内管理ツール" data-price="180000">社内管理ツール（¥180,000）</option>
+      <option value="ポータルサイト" data-price="220000">ポータルサイト（¥220,000）</option>
     </select>
 
-    <label>主要機能（カンマ区切りで入力）</label>
-    <input type="text" id="features" placeholder="例：ログイン, 商品検索, 購入, 注文履歴">
+    <label>主な機能</label>
+    <select id="featureSet" multiple size="5">
+      <option value="ログイン認証" data-price="30000">ログイン認証（¥30,000）</option>
+      <option value="ユーザー管理" data-price="40000">ユーザー管理（¥40,000）</option>
+      <option value="検索・一覧表示" data-price="35000">検索・一覧表示（¥35,000）</option>
+      <option value="登録・編集" data-price="40000">登録・編集（¥40,000）</option>
+      <option value="レポート出力" data-price="50000">レポート出力（¥50,000）</option>
+      <option value="通知・メール送信" data-price="30000">通知・メール送信（¥30,000）</option>
+      <option value="ダッシュボード" data-price="45000">ダッシュボード（¥45,000）</option>
+    </select>
 
-    <label>利用ユーザー規模</label>
+    <label>ユーザー規模</label>
     <select id="scale">
-      <option value="small">少人数（〜100名）</option>
-      <option value="medium">中規模（〜1,000名）</option>
-      <option value="large">大規模（1,000名以上）</option>
+      <option value="small" data-multiplier="1.0">少人数（〜100名）</option>
+      <option value="medium" data-multiplier="1.3">中規模（〜1,000名）</option>
+      <option value="large" data-multiplier="1.6">大規模（1,000名以上）</option>
     </select>
 
-    <label>データ登録テーブル数（目安）</label>
-    <input type="number" id="tableCount" min="1" max="50" value="5">
+    <label>特記事項</label>
+    <textarea id="notes" rows="3" placeholder="要望、制約、外部連携など"></textarea>
 
-    <label>備考・特記事項</label>
-    <textarea id="notes" rows="3"></textarea>
-
-    <button onclick="generateDocuments()">設計書と見積を生成</button>
+    <button onclick="generateAll()">設計書・見積を生成</button>
   </section>
 
   <section class="result" id="output"></section>
 
   <script>
-    function generateDocuments() {
-      const systemType = document.getElementById("systemType").value;
-      const features = document.getElementById("features").value.split(",").map(f => f.trim()).filter(Boolean);
-      const scale = document.getElementById("scale").value;
-      const tableCount = parseInt(document.getElementById("tableCount").value);
+    function generateAll() {
+      const systemSelect = document.getElementById("systemType");
+      const systemType = systemSelect.value;
+      const basePrice = parseInt(systemSelect.selectedOptions[0].dataset.price);
+
+      const selectedFeatures = Array.from(document.getElementById("featureSet").selectedOptions)
+        .map(opt => ({ name: opt.value, price: parseInt(opt.dataset.price) }));
+
+      const scaleSelect = document.getElementById("scale");
+      const scaleText = scaleSelect.options[scaleSelect.selectedIndex].text;
+      const multiplier = parseFloat(scaleSelect.selectedOptions[0].dataset.multiplier);
+
       const notes = document.getElementById("notes").value;
 
-      const baseRates = { "ECサイト": 200000, "予約システム": 250000, "社内管理ツール": 180000, "ポータルサイト": 220000 };
-      const scaleRate = { small: 1.0, medium: 1.3, large: 1.6 };
+      // 金額計算
+      let subtotal = basePrice;
+      selectedFeatures.forEach(f => subtotal += f.price);
+      const total = Math.round(subtotal * multiplier);
 
-      const estimate = Math.round((baseRates[systemType] + features.length * 30000 + tableCount * 15000) * scaleRate[scale]);
-
-      const systemOverview = `
-        <h3>📘 システム概要</h3>
-        <p>${systemType}として構築予定。想定ユーザー規模は <strong>${scale}</strong>。主要機能は以下の通り。</p>
-        <ul>${features.map(f => `<li>${f}</li>`).join("")}</ul>
+      // 明細作成
+      let estimateTable = `
+        <h3>💰 見積明細</h3>
+        <table>
+          <tr><th>項目</th><th class="price">金額（円）</th></tr>
+          <tr><td>${systemType} 基本構築費</td><td class="price">${basePrice.toLocaleString()}</td></tr>
+          ${selectedFeatures.map(f => `<tr><td>${f.name}</td><td class="price">${f.price.toLocaleString()}</td></tr>`).join("")}
+          <tr><td>ユーザー規模調整 (${scaleText})</td><td class="price">× ${multiplier}</td></tr>
+          <tr><th>概算見積金額</th><th class="price">${total.toLocaleString()}</th></tr>
+        </table>
       `;
 
-      const featureTable = `
+      // 機能一覧
+      let featureList = `
         <h3>🧩 機能一覧</h3>
         <table>
           <tr><th>No</th><th>機能名</th><th>概要</th></tr>
-          ${features.map((f, i) => `<tr><td>${i + 1}</td><td>${f}</td><td>${f}に関する処理を実装予定</td></tr>`).join("")}
+          ${selectedFeatures.map((f, i) => `<tr><td>${i+1}</td><td>${f.name}</td><td>${f.name}に関する処理を提供</td></tr>`).join("")}
         </table>
       `;
 
-      const tableDesign = `
-        <h3>🗂️ テーブル設計（概略）</h3>
+      // テーブル設計（機能から命名）
+      let tableDesign = `
+        <h3>🗂️ テーブル設計（自動推定）</h3>
         <table>
           <tr><th>No</th><th>テーブル名</th><th>用途</th></tr>
-          ${Array.from({length: tableCount}).map((_, i) => `<tr><td>${i+1}</td><td>table_${i+1}</td><td>業務データ管理用</td></tr>`).join("")}
+          ${selectedFeatures.map((f, i) => {
+            const tableName = f.name.replace(/[^\w\u3000-\u9fff]/g, "").replace(/\s/g, "_").toLowerCase() + "_tbl";
+            return `<tr><td>${i+1}</td><td>${tableName}</td><td>${f.name}関連情報を管理</td></tr>`;
+          }).join("")}
         </table>
       `;
 
-      const estimateSection = `
-        <h3>💰 概算見積金額</h3>
-        <p><strong>${estimate.toLocaleString()} 円（税抜）</strong></p>
+      // システム概要
+      let systemSummary = `
+        <h3>📘 システム概要</h3>
+        <p>本システムは<strong>${systemType}</strong>として構築予定。想定規模は<strong>${scaleText}</strong>。</p>
+        <p>主要機能は以下の通り。</p>
+        <ul>${selectedFeatures.map(f => `<li>${f.name}</li>`).join("")}</ul>
       `;
 
       const memo = notes ? `<h3>📝 備考</h3><p>${notes}</p>` : "";
 
-      document.getElementById("output").innerHTML = systemOverview + featureTable + tableDesign + estimateSection + memo;
+      document.getElementById("output").innerHTML =
+        systemSummary + featureList + tableDesign + estimateTable + memo;
     }
   </script>
 </body>
