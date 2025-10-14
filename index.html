@@ -1,146 +1,167 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>Webシステム設計・見積支援ツール v2</title>
-  <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-      background: #f5f7fa;
-    }
-    h1 { text-align: center; color: #333; }
-    h2 { border-bottom: 2px solid #ccc; margin-top: 30px; padding-bottom: 5px; }
-    section {
-      background: #fff; padding: 20px; border-radius: 10px;
-      margin-top: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    select, textarea {
-      width: 100%; margin-top: 5px; margin-bottom: 10px;
-      padding: 8px; border-radius: 6px; border: 1px solid #ccc;
-    }
-    button {
-      background: #0078d4; color: white; border: none;
-      padding: 10px 20px; border-radius: 6px; cursor: pointer;
-      font-size: 15px;
-    }
-    button:hover { background: #005fa3; }
-    .result { background: #fff; padding: 20px; border-radius: 10px; margin-top: 30px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    th { background: #f0f0f0; }
-    .price { text-align: right; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webシステム設計・見積支援ツール v3</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  body {
+    font-family: "Segoe UI", sans-serif;
+    padding: 10px;
+    background: #f5f7fa;
+    max-width: 600px;
+    margin: auto;
+  }
+  h1 { text-align: center; color: #333; font-size: 1.4em; }
+  section {
+    background: #fff; padding: 15px; border-radius: 10px;
+    margin-top: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.9em; }
+  select, textarea {
+    width: 100%; margin-top: 5px; margin-bottom: 10px;
+    padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.9em;
+  }
+  button {
+    width: 100%; background: #0078d4; color: white;
+    border: none; padding: 10px; border-radius: 6px;
+    cursor: pointer; font-size: 1em; margin-top: 10px;
+  }
+  button:hover { background: #005fa3; }
+  .result { background: #fff; padding: 15px; border-radius: 10px; margin-top: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+  th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+  th { background: #f0f0f0; }
+  .price { text-align: right; }
+  .mermaid { background: #fff; border-radius: 8px; padding: 10px; margin-top: 10px; }
+  #previewFrame { width: 100%; height: 250px; border: 1px solid #ccc; border-radius: 8px; margin-top: 10px; }
+</style>
 </head>
 <body>
-  <h1>🌐 Webシステム設計・見積支援ツール v2</h1>
+<h1>📱 Web設計・見積支援ツール v3</h1>
 
-  <section>
-    <h2>1️⃣ ヒアリングシート（選択式）</h2>
+<section>
+  <label>システム種別</label>
+  <select id="systemType">
+    <option value="ECサイト" data-price="200000">ECサイト（¥200,000）</option>
+    <option value="予約システム" data-price="250000">予約システム（¥250,000）</option>
+    <option value="社内管理ツール" data-price="180000">社内管理ツール（¥180,000）</option>
+    <option value="ポータルサイト" data-price="220000">ポータルサイト（¥220,000）</option>
+  </select>
 
-    <label>システム種別</label>
-    <select id="systemType">
-      <option value="ECサイト" data-price="200000">ECサイト（¥200,000）</option>
-      <option value="予約システム" data-price="250000">予約システム（¥250,000）</option>
-      <option value="社内管理ツール" data-price="180000">社内管理ツール（¥180,000）</option>
-      <option value="ポータルサイト" data-price="220000">ポータルサイト（¥220,000）</option>
-    </select>
+  <label>主要機能</label>
+  <select id="featureSet" multiple size="5">
+    <option value="ログイン認証" data-price="30000">ログイン認証（¥30,000）</option>
+    <option value="ユーザー管理" data-price="40000">ユーザー管理（¥40,000）</option>
+    <option value="検索・一覧表示" data-price="35000">検索・一覧表示（¥35,000）</option>
+    <option value="登録・編集" data-price="40000">登録・編集（¥40,000）</option>
+    <option value="レポート出力" data-price="50000">レポート出力（¥50,000）</option>
+    <option value="通知・メール送信" data-price="30000">通知・メール送信（¥30,000）</option>
+    <option value="ダッシュボード" data-price="45000">ダッシュボード（¥45,000）</option>
+  </select>
 
-    <label>主な機能</label>
-    <select id="featureSet" multiple size="5">
-      <option value="ログイン認証" data-price="30000">ログイン認証（¥30,000）</option>
-      <option value="ユーザー管理" data-price="40000">ユーザー管理（¥40,000）</option>
-      <option value="検索・一覧表示" data-price="35000">検索・一覧表示（¥35,000）</option>
-      <option value="登録・編集" data-price="40000">登録・編集（¥40,000）</option>
-      <option value="レポート出力" data-price="50000">レポート出力（¥50,000）</option>
-      <option value="通知・メール送信" data-price="30000">通知・メール送信（¥30,000）</option>
-      <option value="ダッシュボード" data-price="45000">ダッシュボード（¥45,000）</option>
-    </select>
+  <label>ユーザー規模</label>
+  <select id="scale">
+    <option value="small" data-multiplier="1.0">少人数（〜100名）</option>
+    <option value="medium" data-multiplier="1.3">中規模（〜1,000名）</option>
+    <option value="large" data-multiplier="1.6">大規模（1,000名以上）</option>
+  </select>
 
-    <label>ユーザー規模</label>
-    <select id="scale">
-      <option value="small" data-multiplier="1.0">少人数（〜100名）</option>
-      <option value="medium" data-multiplier="1.3">中規模（〜1,000名）</option>
-      <option value="large" data-multiplier="1.6">大規模（1,000名以上）</option>
-    </select>
+  <label>特記事項</label>
+  <textarea id="notes" rows="2" placeholder="要望、制約、外部連携など"></textarea>
 
-    <label>特記事項</label>
-    <textarea id="notes" rows="3" placeholder="要望、制約、外部連携など"></textarea>
+  <button onclick="generateAll()">設計書・見積を生成</button>
+  <button onclick="downloadPDF()">📄 PDF出力</button>
+</section>
 
-    <button onclick="generateAll()">設計書・見積を生成</button>
-  </section>
+<section class="result" id="output"></section>
 
-  <section class="result" id="output"></section>
+<section>
+  <h3>🧪 コードプレビュー</h3>
+  <textarea id="codeInput" rows="5" placeholder="ここにHTMLコードを貼り付けてプレビュー"></textarea>
+  <button onclick="previewCode()">プレビュー表示</button>
+  <iframe id="previewFrame"></iframe>
+</section>
 
-  <script>
-    function generateAll() {
-      const systemSelect = document.getElementById("systemType");
-      const systemType = systemSelect.value;
-      const basePrice = parseInt(systemSelect.selectedOptions[0].dataset.price);
+<script>
+  mermaid.initialize({ startOnLoad: false });
 
-      const selectedFeatures = Array.from(document.getElementById("featureSet").selectedOptions)
-        .map(opt => ({ name: opt.value, price: parseInt(opt.dataset.price) }));
+  function generateAll() {
+    const sysSel = document.getElementById("systemType");
+    const sysType = sysSel.value;
+    const basePrice = parseInt(sysSel.selectedOptions[0].dataset.price);
+    const features = Array.from(document.getElementById("featureSet").selectedOptions)
+      .map(o => ({ name: o.value, price: parseInt(o.dataset.price) }));
+    const scaleSel = document.getElementById("scale");
+    const scaleText = scaleSel.options[scaleSel.selectedIndex].text;
+    const mult = parseFloat(scaleSel.selectedOptions[0].dataset.multiplier);
+    const notes = document.getElementById("notes").value;
 
-      const scaleSelect = document.getElementById("scale");
-      const scaleText = scaleSelect.options[scaleSelect.selectedIndex].text;
-      const multiplier = parseFloat(scaleSelect.selectedOptions[0].dataset.multiplier);
+    let subtotal = basePrice;
+    features.forEach(f => subtotal += f.price);
+    const total = Math.round(subtotal * mult);
 
-      const notes = document.getElementById("notes").value;
+    // 概要
+    let summary = `<h3>📘 システム概要</h3>
+    <p><strong>${sysType}</strong>を構築。ユーザー規模：${scaleText}</p>
+    <ul>${features.map(f => `<li>${f.name}</li>`).join("")}</ul>`;
 
-      // 金額計算
-      let subtotal = basePrice;
-      selectedFeatures.forEach(f => subtotal += f.price);
-      const total = Math.round(subtotal * multiplier);
+    // 明細表
+    let detail = `<h3>💰 見積明細</h3><table>
+    <tr><th>項目</th><th class="price">金額（円）</th></tr>
+    <tr><td>${sysType} 基本構築費</td><td class="price">${basePrice.toLocaleString()}</td></tr>
+    ${features.map(f => `<tr><td>${f.name}</td><td class="price">${f.price.toLocaleString()}</td></tr>`).join("")}
+    <tr><td>規模調整 (${scaleText})</td><td class="price">×${mult}</td></tr>
+    <tr><th>概算見積金額</th><th class="price">${total.toLocaleString()}</th></tr></table>`;
 
-      // 明細作成
-      let estimateTable = `
-        <h3>💰 見積明細</h3>
-        <table>
-          <tr><th>項目</th><th class="price">金額（円）</th></tr>
-          <tr><td>${systemType} 基本構築費</td><td class="price">${basePrice.toLocaleString()}</td></tr>
-          ${selectedFeatures.map(f => `<tr><td>${f.name}</td><td class="price">${f.price.toLocaleString()}</td></tr>`).join("")}
-          <tr><td>ユーザー規模調整 (${scaleText})</td><td class="price">× ${multiplier}</td></tr>
-          <tr><th>概算見積金額</th><th class="price">${total.toLocaleString()}</th></tr>
-        </table>
-      `;
+    // テーブル設計（具体化）
+    let tableDef = `<h3>🗂️ テーブル設計</h3>`;
+    tableDef += features.map((f, i) => {
+      const name = f.name.replace(/[^\w\u3000-\u9fff]/g, "").replace(/\s/g, "_").toLowerCase();
+      const columns = [
+        { n: "id", t: "INT", r: "PK" },
+        { n: "created_at", t: "DATETIME", r: "必須" },
+        { n: "updated_at", t: "DATETIME", r: "必須" },
+        { n: name + "_name", t: "VARCHAR(100)", r: "必須" },
+        { n: name + "_desc", t: "TEXT", r: "任意" },
+      ];
+      return `<h4>${i+1}. ${f.name}</h4>
+      <table><tr><th>項目名</th><th>型</th><th>制約</th></tr>
+      ${columns.map(c => `<tr><td>${c.n}</td><td>${c.t}</td><td>${c.r}</td></tr>`).join("")}</table>`;
+    }).join("");
 
-      // 機能一覧
-      let featureList = `
-        <h3>🧩 機能一覧</h3>
-        <table>
-          <tr><th>No</th><th>機能名</th><th>概要</th></tr>
-          ${selectedFeatures.map((f, i) => `<tr><td>${i+1}</td><td>${f.name}</td><td>${f.name}に関する処理を提供</td></tr>`).join("")}
-        </table>
-      `;
+    // Mermaid構造図
+    let diagram = `graph TD;
+      A[ユーザー] --> B[${sysType}];
+      ${features.map((f,i)=>`B --> F${i}(${f.name})`).join(" ")}`;
+    let mermaidHtml = `<h3>🧭 システム構造図</h3><div class="mermaid">${diagram}</div>`;
 
-      // テーブル設計（機能から命名）
-      let tableDesign = `
-        <h3>🗂️ テーブル設計（自動推定）</h3>
-        <table>
-          <tr><th>No</th><th>テーブル名</th><th>用途</th></tr>
-          ${selectedFeatures.map((f, i) => {
-            const tableName = f.name.replace(/[^\w\u3000-\u9fff]/g, "").replace(/\s/g, "_").toLowerCase() + "_tbl";
-            return `<tr><td>${i+1}</td><td>${tableName}</td><td>${f.name}関連情報を管理</td></tr>`;
-          }).join("")}
-        </table>
-      `;
+    const memo = notes ? `<h3>📝 備考</h3><p>${notes}</p>` : "";
 
-      // システム概要
-      let systemSummary = `
-        <h3>📘 システム概要</h3>
-        <p>本システムは<strong>${systemType}</strong>として構築予定。想定規模は<strong>${scaleText}</strong>。</p>
-        <p>主要機能は以下の通り。</p>
-        <ul>${selectedFeatures.map(f => `<li>${f.name}</li>`).join("")}</ul>
-      `;
+    document.getElementById("output").innerHTML =
+      summary + detail + tableDef + mermaidHtml + memo;
 
-      const memo = notes ? `<h3>📝 備考</h3><p>${notes}</p>` : "";
+    mermaid.init(undefined, document.querySelectorAll(".mermaid"));
+  }
 
-      document.getElementById("output").innerHTML =
-        systemSummary + featureList + tableDesign + estimateTable + memo;
-    }
-  </script>
+  function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ unit: "pt", format: "a4" });
+    pdf.html(document.getElementById("output"), {
+      callback: function (pdf) {
+        pdf.save("web_system_design.pdf");
+      },
+      x: 20, y: 20, width: 560
+    });
+  }
+
+  function previewCode() {
+    const code = document.getElementById("codeInput").value;
+    const frame = document.getElementById("previewFrame");
+    frame.srcdoc = code;
+  }
+</script>
 </body>
 </html>
