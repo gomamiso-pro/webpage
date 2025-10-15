@@ -3,34 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Web設計・見積・指示書</title>
+<title>🌟Web設計ツール🌟</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-body { font-family: "Hiragino Sans", sans-serif; margin:0; padding:10px; background:#f7f7f7; }
-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-header h1 { font-size:1.4rem; color:#333; }
-.price-btn { background:#0078d4; color:white; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
-.price-btn:hover { background:#005fa3; }
-section { background:#fff; padding:15px; border-radius:12px; margin-top:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-h3 { margin-top:20px; }
-table { width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:10px; }
-th, td { border:1px solid #ddd; padding:6px; }
-th { background:#efefef; }
-.price { text-align:right; }
-textarea { width:100%; padding:8px; margin-top:4px; border-radius:6px; border:1px solid #ccc; font-size:0.9rem; }
-iframe { width:100%; height:200px; border:1px solid #ccc; border-radius:6px; margin-top:10px; }
-.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); justify-content:center; align-items:center; }
-.modal-content { background:#fff; padding:20px; border-radius:10px; max-width:90%; max-height:90%; overflow:auto; }
+body { font-family: 'Baloo 2', sans-serif; background:#fdf6f0; margin:0; padding:10px; color:#333; }
+header { display:flex; justify-content:space-between; align-items:center; padding:10px 0; }
+header h1 { font-size:2rem; color:#ff6f61; font-weight:bold; }
+.price-btn { font-size:1.2rem; border:none; background:none; cursor:pointer; }
+section { background:#fff; padding:15px; border-radius:15px; margin-top:10px; box-shadow:0 3px 8px rgba(0,0,0,0.1); }
+h3 { margin-top:20px; color:#ff6f61; }
+table { width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:10px; border-radius:10px; overflow:hidden; }
+th, td { border:1px solid #eee; padding:8px; }
+th { background:#fde2e1; }
+textarea { width:100%; padding:10px; margin-top:6px; border-radius:10px; border:1px solid #eee; font-family:'Baloo 2', sans-serif; font-size:0.9rem; }
+iframe { width:100%; height:250px; border:1px solid #eee; border-radius:10px; margin-top:10px; }
+button { width:100%; background:#ff6f61; color:white; border:none; padding:12px; border-radius:12px; margin-top:15px; font-size:1rem; cursor:pointer; }
+button:hover { background:#e55b4f; }
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); justify-content:center; align-items:center; }
+.modal-content { background:#fff; padding:20px; border-radius:15px; max-width:90%; max-height:90%; overflow:auto; }
 .close { float:right; cursor:pointer; font-weight:bold; font-size:1.2rem; }
-button { width:100%; background:#0078d4; color:white; border:none; padding:12px; border-radius:8px; margin-top:15px; font-size:1rem; }
-button:hover { background:#005fa3; }
 </style>
 </head>
 <body>
+
 <header>
-<h1>📱 Web設計・見積・指示書</h1>
-<button class="price-btn" onclick="showPriceModal()">💰料金表</button>
+<h1>🌟 Web設計ツール 🌟</h1>
+<button class="price-btn" onclick="showPriceModal()">💰</button>
 </header>
 
 <section id="output">
@@ -40,7 +40,7 @@ button:hover { background:#005fa3; }
 タイプ：ECサイト<br>
 ターゲット：一般ユーザー<br>
 技術構成：HTML, CSS, JavaScript, Python<br>
-デザイン：1カラム（スマホ中心）・サンセリフ・ブルー系<br>
+デザイン：1カラム（スマホ中心）・丸文字フォント・ブルー系アクセント<br>
 サーバー：さくらサーバー<br>
 外部連携：ファイルメーカー<br>
 SNS連携：Instagram, LINE
@@ -58,41 +58,7 @@ SNS連携：Instagram, LINE
 </table>
 
 <h3>🗂️ テーブル設計</h3>
-<table><tr><th>項目名</th><th>型</th></tr>
-<tr><td>id</td><td>INT</td></tr>
-<tr><td>username</td><td>VARCHAR</td></tr>
-<tr><td>password</td><td>VARCHAR</td></tr>
-</table>
-
-<table><tr><th>項目名</th><th>型</th></tr>
-<tr><td>id</td><td>INT</td></tr>
-<tr><td>keyword</td><td>VARCHAR</td></tr>
-<tr><td>created_at</td><td>DATETIME</td></tr>
-</table>
-
-<table><tr><th>項目名</th><th>型</th></tr>
-<tr><td>id</td><td>INT</td></tr>
-<tr><td>title</td><td>VARCHAR</td></tr>
-<tr><td>content</td><td>TEXT</td></tr>
-</table>
-
-<table><tr><th>項目名</th><th>型</th></tr>
-<tr><td>id</td><td>INT</td></tr>
-<tr><td>user_id</td><td>INT</td></tr>
-<tr><td>comment</td><td>TEXT</td></tr>
-</table>
-
-<table><tr><th>項目名</th><th>型</th></tr>
-<tr><td>id</td><td>INT</td></tr>
-<tr><td>target_user</td><td>INT</td></tr>
-<tr><td>message</td><td>TEXT</td></tr>
-</table>
-
-<table><tr><th>項目名</th><th>型</th></tr>
-<tr><td>id</td><td>INT</td></tr>
-<tr><td>metric_name</td><td>VARCHAR</td></tr>
-<tr><td>value</td><td>FLOAT</td></tr>
-</table>
+<p>ログイン_tbl, 検索_tbl, 登録・編集_tbl, コメント_tbl, 通知_tbl, 分析_tbl</p>
 
 <h3>🎞️ 画面遷移図</h3>
 <div class="mermaid">
@@ -119,17 +85,17 @@ Home-->管理画面;
 
 <h3>📄 コード生成指示書</h3>
 <textarea readonly>
-目的：おまかせ
-タイプ：ECサイト
-ターゲット：一般ユーザー
-技術構成：HTML, CSS, JavaScript, Python
-デザイン：1カラム（スマホ中心）・サンセリフ・ブルー系
-サーバー：さくらサーバー
-外部連携：ファイルメーカー
-SNS連携：Instagram, LINE
-選択機能：ログイン, 検索, 登録・編集, コメント, 通知, 分析
-テーブル：ログイン_tbl, 検索_tbl, 登録・編集_tbl, コメント_tbl, 通知_tbl, 分析_tbl
-ページ構成：トップページ, 商品一覧, 商品詳細, カート, 会員登録, お問い合わせ, 管理画面
+AIへの指示：
+スマホ向け1カラムデザインで丸文字フォント「Baloo 2」を使用。タイトルは目立つカラー、大きさで表示。
+料金表はアイコンボタンで右上に表示。
+内容：
+- システム概要（目的:おまかせ、タイプ:ECサイト、ターゲット:一般ユーザー）
+- 技術構成: HTML, CSS, JavaScript, Python
+- 機能一覧: ログイン, 検索, 登録・編集, コメント, 通知, 分析
+- テーブル設計: ログイン_tbl, 検索_tbl, 登録・編集_tbl, コメント_tbl, 通知_tbl, 分析_tbl
+- 画面遷移図: トップページ→商品一覧→商品詳細→カート→会員登録→お問い合わせ→管理画面
+- 見積明細: 基本設計, 機能追加, テーブル設計、税込合計
+- コードプレビュー: HTML/CSS/JSを貼付けて表示可能
 </textarea>
 
 <h3>💻 コードプレビュー</h3>
@@ -141,7 +107,7 @@ SNS連携：Instagram, LINE
 <div id="priceModal" class="modal">
 <div class="modal-content">
 <span class="close" onclick="closePriceModal()">&times;</span>
-<h3>💰料金表（一般的単価目安）</h3>
+<h3>💰料金表</h3>
 <table>
 <tr><th>区分</th><th>項目</th><th>単価</th></tr>
 <tr><td>基本設計</td><td>要件定義</td><td>150,000</td></tr>
