@@ -1,248 +1,256 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>Web設計・見積・指示書ツール（Advanced）</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
-    body { font-family: "Hiragino Sans", sans-serif; margin: 0; padding: 10px; background: #f7f7f7; }
-    h1 { text-align: center; font-size: 1.4rem; color: #333; }
-    section { background: #fff; padding: 15px; border-radius: 12px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.9rem; }
-    select, input, textarea {
-      width: 100%; padding: 8px; margin-top: 4px;
-      border-radius: 6px; border: 1px solid #ccc; font-size: 0.9rem;
-    }
-    button {
-      width: 100%; background: #0078d4; color: white; border: none;
-      padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 1rem;
-    }
-    button:hover { background: #005fa3; }
-    .result { background: #fff; padding: 15px; border-radius: 10px; margin-top: 20px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 10px; }
-    th, td { border: 1px solid #ddd; padding: 6px; }
-    th { background: #efefef; }
-    .price { text-align: right; }
-    textarea#instruction { width: 100%; height: 120px; margin-top: 10px; font-size: 0.9rem; }
-    iframe { width: 100%; height: 200px; border: 1px solid #ccc; border-radius: 6px; margin-top: 10px; }
-    .sns-icons img { width: 24px; height: 24px; margin-right: 6px; vertical-align: middle; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web設計・見積・指示書ツール（完全版）</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+body { font-family: "Hiragino Sans", sans-serif; margin:0; padding:10px; background:#f7f7f7; }
+header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+header h1 { font-size:1.4rem; color:#333; }
+.price-btn { background:#0078d4; color:white; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
+.price-btn:hover { background:#005fa3; }
+section { background:#fff; padding:15px; border-radius:12px; margin-top:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+label { display:block; margin-top:10px; font-weight:bold; font-size:0.9rem; }
+select, input, textarea { width:100%; padding:8px; margin-top:4px; border-radius:6px; border:1px solid #ccc; font-size:0.9rem; }
+button { width:100%; background:#0078d4; color:white; border:none; padding:12px; border-radius:8px; margin-top:15px; font-size:1rem; }
+button:hover { background:#005fa3; }
+.result { background:#fff; padding:15px; border-radius:10px; margin-top:20px; }
+table { width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:10px; }
+th, td { border:1px solid #ddd; padding:6px; }
+th { background:#efefef; }
+.price { text-align:right; }
+textarea#instruction { width:100%; height:120px; margin-top:10px; font-size:0.9rem; }
+iframe { width:100%; height:200px; border:1px solid #ccc; border-radius:6px; margin-top:10px; }
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); justify-content:center; align-items:center; }
+.modal-content { background:#fff; padding:20px; border-radius:10px; max-width:90%; max-height:90%; overflow:auto; }
+.close { float:right; cursor:pointer; font-weight:bold; font-size:1.2rem; }
+</style>
 </head>
 <body>
-  <h1>📱 Web設計・見積・指示書ツール</h1>
+<header>
+<h1>📱 Web設計・見積・指示書ツール</h1>
+<button class="price-btn" onclick="showPriceModal()">💰料金表</button>
+</header>
 
-  <section>
-    <h2>ヒアリングシート</h2>
+<section>
+<h2>ヒアリングシート</h2>
 
-    <label>目的</label>
-    <input type="text" id="purpose" placeholder="例：新規顧客獲得・予約効率化・情報発信など（未入力でおまかせ）">
+<label>目的</label>
+<input type="text" id="purpose" placeholder="例：新規顧客獲得・予約効率化・情報発信（未入力でおまかせ）">
 
-    <label>システム種別</label>
-    <select id="systemType">
-      <option value="ECサイト">ECサイト</option>
-      <option value="予約システム">予約システム</option>
-      <option value="社内管理">社内管理</option>
-      <option value="ポータルサイト">ポータルサイト</option>
-    </select>
+<label>システム種別</label>
+<select id="systemType">
+<option>ECサイト</option>
+<option>予約システム</option>
+<option>社内管理</option>
+<option>ポータルサイト</option>
+</select>
 
-    <label>ターゲット層</label>
-    <select id="target">
-      <option>一般ユーザー</option>
-      <option>法人</option>
-      <option>学生・教育系</option>
-      <option>高齢者向け</option>
-    </select>
+<label>ターゲット層</label>
+<select id="target">
+<option>一般ユーザー</option>
+<option>法人</option>
+<option>学生・教育系</option>
+<option>高齢者向け</option>
+</select>
 
-    <label>使用言語（複数選択可）</label>
-    <select id="langs" multiple size="5">
-      <option>HTML</option>
-      <option>CSS</option>
-      <option>JavaScript</option>
-      <option>React</option>
-      <option>PHP</option>
-      <option>Laravel</option>
-      <option>Python</option>
-      <option>Django</option>
-    </select>
+<label>使用言語（複数選択可）</label>
+<select id="langs" multiple size="5">
+<option>HTML</option><option>CSS</option><option>JavaScript</option>
+<option>React</option><option>PHP</option><option>Laravel</option>
+<option>Python</option><option>Django</option>
+</select>
 
-    <label>レイアウト・デザイン</label>
-    <select id="layout">
-      <option>1カラム（スマホ中心）</option>
-      <option>2カラム</option>
-      <option>カード型デザイン</option>
-    </select>
+<label>レイアウト・デザイン</label>
+<select id="layout">
+<option>1カラム（スマホ中心）</option>
+<option>2カラム</option>
+<option>カード型デザイン</option>
+</select>
 
-    <label>フォント</label>
-    <select id="font">
-      <option>サンセリフ</option>
-      <option>明朝体</option>
-      <option>丸ゴシック</option>
-    </select>
+<label>フォント</label>
+<select id="font">
+<option>サンセリフ</option>
+<option>明朝体</option>
+<option>丸ゴシック</option>
+</select>
 
-    <label>色味・雰囲気</label>
-    <select id="color">
-      <option>ブルー系（信頼）</option>
-      <option>オレンジ系（明るい）</option>
-      <option>グリーン系（安心）</option>
-      <option>モノトーン（落ち着き）</option>
-    </select>
+<label>色味・雰囲気</label>
+<select id="color">
+<option>ブルー系</option>
+<option>オレンジ系</option>
+<option>グリーン系</option>
+<option>モノトーン</option>
+</select>
 
-    <label>ページ構成（複数選択可）</label>
-    <select id="pages" multiple size="6">
-      <option>トップページ</option>
-      <option>商品一覧</option>
-      <option>商品詳細</option>
-      <option>カート</option>
-      <option>会員登録</option>
-      <option>お問い合わせ</option>
-      <option>管理画面</option>
-    </select>
+<label>ページ構成（複数選択可）</label>
+<select id="pages" multiple size="6">
+<option>トップページ</option><option>商品一覧</option><option>商品詳細</option>
+<option>カート</option><option>会員登録</option><option>お問い合わせ</option>
+<option>管理画面</option>
+</select>
 
-    <label>機能（複数選択可）</label>
-    <div id="featureList">
-      <label><input type="checkbox" value="ログイン">ログイン</label>
-      <label><input type="checkbox" value="検索">検索</label>
-      <label><input type="checkbox" value="登録・編集">登録・編集</label>
-      <label><input type="checkbox" value="コメント">コメント</label>
-      <label><input type="checkbox" value="通知">通知</label>
-      <label><input type="checkbox" value="分析">分析</label>
-    </div>
+<label>機能（複数選択可）</label>
+<div id="featureList">
+<label><input type="checkbox" value="ログイン">ログイン</label>
+<label><input type="checkbox" value="検索">検索</label>
+<label><input type="checkbox" value="登録・編集">登録・編集</label>
+<label><input type="checkbox" value="コメント">コメント</label>
+<label><input type="checkbox" value="通知">通知</label>
+<label><input type="checkbox" value="分析">分析</label>
+</div>
 
-    <label>SNS連携（複数選択可）</label>
-    <select id="sns" multiple size="4">
-      <option>Twitter</option>
-      <option>Instagram</option>
-      <option>LINE</option>
-      <option>YouTube</option>
-    </select>
+<label>サーバー選択</label>
+<select id="server">
+<option>さくらサーバー</option>
+<option>Xserver</option>
+<option>AWS</option>
+<option>Google Cloud</option>
+<option>ローカル開発</option>
+</select>
 
-    <button onclick="generateAll()">設計・見積・指示書を作成</button>
-  </section>
+<label>外部連携</label>
+<select id="external" multiple size="2">
+<option>スプレッドシート</option>
+<option>ファイルメーカー</option>
+</select>
 
-  <section class="result" id="output"></section>
+<label>SNS連携（複数選択可）</label>
+<select id="sns" multiple size="4">
+<option>Twitter</option><option>Instagram</option><option>LINE</option><option>YouTube</option>
+</select>
 
-  <script>
-    mermaid.initialize({ startOnLoad: false });
+<button onclick="generateAll()">設計・見積・指示書を作成</button>
+</section>
 
-    const tableTemplates = {
-      "ログイン": [{name:"id",type:"INT"},{name:"username",type:"VARCHAR"},{name:"password",type:"VARCHAR"}],
-      "検索": [{name:"id",type:"INT"},{name:"keyword",type:"VARCHAR"},{name:"created_at",type:"DATETIME"}],
-      "登録・編集": [{name:"id",type:"INT"},{name:"title",type:"VARCHAR"},{name:"content",type:"TEXT"}],
-      "コメント": [{name:"id",type:"INT"},{name:"user_id",type:"INT"},{name:"comment",type:"TEXT"}],
-      "通知": [{name:"id",type:"INT"},{name:"target_user",type:"INT"},{name:"message",type:"TEXT"}],
-      "分析": [{name:"id",type:"INT"},{name:"metric_name",type:"VARCHAR"},{name:"value",type:"FLOAT"}]
-    };
+<section class="result" id="output"></section>
 
-    function generateAll() {
-      const purpose = document.getElementById("purpose").value || "おまかせ";
-      const systemType = document.getElementById("systemType").value;
-      const target = document.getElementById("target").value;
-      const langs = Array.from(document.getElementById("langs").selectedOptions).map(o => o.value);
-      const layout = document.getElementById("layout").value;
-      const font = document.getElementById("font").value;
-      const color = document.getElementById("color").value;
-      const pages = Array.from(document.getElementById("pages").selectedOptions).map(o => o.value);
-      const features = Array.from(document.querySelectorAll("#featureList input:checked")).map(f => f.value);
-      const sns = Array.from(document.getElementById("sns").selectedOptions).map(o => o.value);
+<!-- 料金表モーダル -->
+<div id="priceModal" class="modal">
+<div class="modal-content">
+<span class="close" onclick="closePriceModal()">&times;</span>
+<h3>💰料金表（一般的な単価目安）</h3>
+<table>
+<tr><th>区分</th><th>項目</th><th>単価</th><th>備考</th></tr>
+<tr><td>基本設計</td><td>要件定義</td><td>150,000</td><td>概要・仕様整理含む</td></tr>
+<tr><td>機能追加</td><td>1機能</td><td>30,000</td><td>CRUD＋画面付き</td></tr>
+<tr><td>DB設計</td><td>1テーブル</td><td>10,000</td><td>ER設計含む</td></tr>
+<tr><td>UI/UX</td><td>ページあたり</td><td>15,000</td><td>ワイヤー制作含む</td></tr>
+<tr><td>運用保守</td><td>月額</td><td>5,000〜</td><td>軽微修正対応</td></tr>
+<tr><td>サーバー</td><td>さくら</td><td>10,000/月</td><td>共用プラン</td></tr>
+<tr><td>サーバー</td><td>AWS</td><td>25,000/月〜</td><td>t3.small構成想定</td></tr>
+<tr><td>外部連携</td><td>スプレッドシート</td><td>10,000</td><td>API設定含む</td></tr>
+<tr><td>外部連携</td><td>ファイルメーカー</td><td>20,000</td><td>API中継設定含む</td></tr>
+</table>
+</div>
+</div>
 
-      // 自動テーブル生成
-      let tables = [];
-      features.forEach(f => {
-        if (tableTemplates[f]) {
-          tables.push({name:`${f}_tbl`, fields:tableTemplates[f]});
-        }
-      });
-      if (tables.length === 0) tables.push({name:"main_tbl", fields:[{name:"id",type:"INT"},{name:"name",type:"VARCHAR"}]});
+<script>
+mermaid.initialize({startOnLoad:true});
+const tableTemplates={
+"ログイン":[{name:"id",type:"INT"},{name:"username",type:"VARCHAR"},{name:"password",type:"VARCHAR"}],
+"検索":[{name:"id",type:"INT"},{name:"keyword",type:"VARCHAR"},{name:"created_at",type:"DATETIME"}],
+"登録・編集":[{name:"id",type:"INT"},{name:"title",type:"VARCHAR"},{name:"content",type:"TEXT"}],
+"コメント":[{name:"id",type:"INT"},{name:"user_id",type:"INT"},{name:"comment",type:"TEXT"}],
+"通知":[{name:"id",type:"INT"},{name:"target_user",type:"INT"},{name:"message",type:"TEXT"}],
+"分析":[{name:"id",type:"INT"},{name:"metric_name",type:"VARCHAR"},{name:"value",type:"FLOAT"}]
+};
+function showPriceModal(){document.getElementById("priceModal").style.display="flex";}
+function closePriceModal(){document.getElementById("priceModal").style.display="none";}
 
-      // 見積計算
-      const base = 150000;
-      const perFeature = 30000;
-      const perTable = 10000;
-      const subtotal = base + features.length * perFeature + tables.length * perTable;
-      const total = subtotal * 1.1;
+function generateAll(){
+const purpose=document.getElementById("purpose").value||"おまかせ";
+const systemType=document.getElementById("systemType").value;
+const target=document.getElementById("target").value;
+const langs=Array.from(document.getElementById("langs").selectedOptions).map(o=>o.value);
+const layout=document.getElementById("layout").value;
+const font=document.getElementById("font").value;
+const color=document.getElementById("color").value;
+const pages=Array.from(document.getElementById("pages").selectedOptions).map(o=>o.value);
+const features=Array.from(document.querySelectorAll("#featureList input:checked")).map(f=>f.value);
+const server=document.getElementById("server").value;
+const external=Array.from(document.getElementById("external").selectedOptions).map(o=>o.value);
+const sns=Array.from(document.getElementById("sns").selectedOptions).map(o=>o.value);
 
-      let html = `<h3>📘 システム概要</h3>
-      <p>目的：${purpose}<br>
-      タイプ：${systemType}<br>
-      ターゲット：${target}<br>
-      技術構成：${langs.join(", ")}<br>
-      デザイン：${layout}・${font}・${color}</p>`;
+// 自動テーブル生成
+let tables=[];
+features.forEach(f=>{if(tableTemplates[f]) tables.push({name:`${f}_tbl`, fields:tableTemplates[f]});});
+if(tables.length===0) tables.push({name:"main_tbl", fields:[{name:"id",type:"INT"},{name:"name",type:"VARCHAR"}]});
 
-      html += `<h3>🧩 機能一覧</h3><table><tr><th>No</th><th>機能</th><th>概要</th></tr>`;
-      features.forEach((f,i)=>html+=`<tr><td>${i+1}</td><td>${f}</td><td>${f}機能を実装</td></tr>`);
-      html += `</table>`;
+// 見積計算
+const base=150000, perFeature=30000, perTable=10000;
+const subtotal=base+features.length*perFeature+tables.length*perTable;
+const total=subtotal*1.1;
 
-      html += `<h3>🗂️ テーブル設計</h3>`;
-      tables.forEach((t,i)=>{
-        html += `<h4>${i+1}. ${t.name}</h4><table><tr><th>項目名</th><th>型</th></tr>`;
-        t.fields.forEach(f=>html+=`<tr><td>${f.name}</td><td>${f.type}</td></tr>`);
-        html += `</table>`;
-      });
+// 出力HTML
+let html=`<h3>📘 システム概要</h3>
+<p>目的：${purpose}<br>タイプ：${systemType}<br>ターゲット：${target}<br>技術構成：${langs.join(", ")}<br>デザイン：${layout}・${font}・${color}<br>サーバー：${server}<br>外部連携：${external.join(", ")}<br>SNS連携：${sns.join(", ")}</p>`;
 
-      html += `<h3>💰 見積明細</h3>
-      <table>
-      <tr><th>項目</th><th>単価</th><th>数量</th><th>小計</th></tr>
-      <tr><td>基本設計</td><td class="price">150,000</td><td>1</td><td class="price">150,000</td></tr>
-      <tr><td>機能実装</td><td class="price">30,000</td><td>${features.length}</td><td class="price">${features.length*30000}</td></tr>
-      <tr><td>DB設計</td><td class="price">10,000</td><td>${tables.length}</td><td class="price">${tables.length*10000}</td></tr>
-      <tr><th colspan="3">合計（税抜）</th><th class="price">${subtotal.toLocaleString()}</th></tr>
-      <tr><th colspan="3">税込</th><th class="price">${Math.round(total).toLocaleString()} 円</th></tr>
-      </table>`;
+html+=`<h3>🧩 機能一覧</h3><table><tr><th>No</th><th>機能</th><th>概要</th></tr>`;
+features.forEach((f,i)=>html+=`<tr><td>${i+1}</td><td>${f}</td><td>${f}機能を実装</td></tr>`);
+html+=`</table>`;
 
-      // コーディング指示書
-      const instructionText = 
-`【コーディング指示書】
+// テーブル設計
+html+=`<h3>🗂️ テーブル設計</h3>`;
+tables.forEach((t,i)=>{
+  html+=`<h4>${i+1}. ${t.name}</h4><table><tr><th>項目名</th><th>型</th></tr>`;
+  t.fields.forEach(f=>html+=`<tr><td>${f.name}</td><td>${f.type}</td></tr>`);
+  html+=`</table>`;
+});
+
+// 画面遷移図
+html+=`<h3>🎞️ 画面遷移図</h3><div class="mermaid">graph TD; Home-->${pages.join(" ; ")};</div>`;
+
+// 見積明細
+html+=`<h3>💰 見積明細</h3>
+<table><tr><th>項目</th><th>金額</th></tr>
+<tr><td>基本設計</td><td class="price">${base}</td></tr>
+<tr><td>機能追加 (${features.length}機能)</td><td class="price">${features.length*perFeature}</td></tr>
+<tr><td>テーブル設計 (${tables.length}テーブル)</td><td class="price">${tables.length*perTable}</td></tr>
+<tr><th>合計（税抜）</th><th class="price">${subtotal}</th></tr>
+<tr><th>合計（税込10%）</th><th class="price">${total}</th></tr>
+</table>
+<button onclick="downloadPDF()">PDF出力</button>`;
+
+// コード生成指示書
+html+=`<h3>📄 コード生成指示書</h3>
+<textarea id="instruction" readonly>
 目的：${purpose}
-種別：${systemType}
+タイプ：${systemType}
 ターゲット：${target}
-使用言語：${langs.join(", ")}
-レイアウト：${layout}
-フォント：${font}
-色味：${color}
-機能：${features.join(", ")}
-ページ構成：${pages.join(" → ")}
+技術構成：${langs.join(", ")}
+デザイン：${layout}・${font}・${color}
+サーバー：${server}
+外部連携：${external.join(", ")}
 SNS連携：${sns.join(", ")}
-テーブル数：${tables.length}`;
+選択機能：${features.join(", ")}
+テーブル：${tables.map(t=>t.name).join(", ")}
+ページ構成：${pages.join(", ")}
+</textarea>`;
 
-      html += `<h3>🧾 コード生成用指示書</h3>
-      <textarea id="instruction">${instructionText}</textarea>
-      <button onclick="copyText()">📋 コピー</button>`;
+// コードプレビュー
+html+=`<h3>💻 コードプレビュー</h3><textarea id="codePreview" placeholder="ここにHTML/CSS/JSを貼付け"></textarea>
+<iframe id="iframePreview"></iframe>
+<button onclick="showPreview()">プレビュー表示</button>`;
 
-      // SNSアイコン表示
-      const iconMap = {Twitter:"🐦", Instagram:"📸", LINE:"💬", YouTube:"▶️"};
-      html += `<h3>🔗 SNSリンク</h3><div class="sns-icons">${sns.map(s=>`<span>${iconMap[s]||"🌐"} ${s}</span>`).join(" ")}</div>`;
+document.getElementById("output").innerHTML=html;
+}
 
-      // 画面遷移図
-      let mermaidCode = "graph TD;\n";
-      pages.forEach((p,i)=>{ if (i<pages.length-1) mermaidCode += `${p}-->${pages[i+1]}\n`; });
-      html += `<h3>🧭 画面遷移図</h3><div class="mermaid">${mermaidCode}</div>`;
+// PDF出力
+function downloadPDF(){
+const element=document.getElementById("output");
+html2pdf().from(element).save("estimate.pdf");
+}
 
-      // コードプレビュー
-      const previewCode = `
-      <html><body style='font-family:${font}; color:#333;'>
-      <h2>${systemType}</h2><p>${purpose}</p>
-      <ul>${features.map(f=>`<li>${f}</li>`).join("")}</ul>
-      </body></html>`;
-      html += `<h3>🔍 コードプレビュー</h3><iframe srcdoc="${previewCode.replace(/"/g, '&quot;')}"></iframe>`;
-
-      html += `<button onclick="downloadPDF()">📄 PDF出力</button>`;
-
-      document.getElementById("output").innerHTML = html;
-      mermaid.init(undefined, document.querySelectorAll('.mermaid'));
-    }
-
-    function copyText() {
-      const text = document.getElementById("instruction");
-      text.select(); document.execCommand("copy");
-      alert("指示書をコピーしました！");
-    }
-
-    function downloadPDF() {
-      const element = document.getElementById("output");
-      html2pdf().set({ filename: "web_design_estimate.pdf", jsPDF: { format: "a4" } }).from(element).save();
-    }
-  </script>
+// プレビュー表示
+function showPreview(){
+const code=document.getElementById("codePreview").value;
+const iframe=document.getElementById("iframePreview");
+iframe.srcdoc=code;
+}
+</script>
 </body>
 </html>
