@@ -3,33 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟Web設計ツール🌟</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+<title>Web設計ツール</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-body { font-family: 'Baloo 2', sans-serif; background:#fdf6f0; margin:0; padding:10px; color:#333; }
-header { display:flex; justify-content:space-between; align-items:center; padding:10px 0; }
-header h1 { font-size:2rem; color:#ff6f61; font-weight:bold; }
+body { font-family:'Noto Sans JP', sans-serif; background:#fafafa; margin:0; padding:10px; color:#222; }
+header { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #ddd; }
+header h1 { font-size:1.8rem; font-weight:700; color:#333; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .price-btn { font-size:1.2rem; border:none; background:none; cursor:pointer; }
-section { background:#fff; padding:15px; border-radius:15px; margin-top:10px; box-shadow:0 3px 8px rgba(0,0,0,0.1); }
-h3 { margin-top:20px; color:#ff6f61; }
-table { width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:10px; border-radius:10px; overflow:hidden; }
-th, td { border:1px solid #eee; padding:8px; }
-th { background:#fde2e1; }
-textarea { width:100%; padding:10px; margin-top:6px; border-radius:10px; border:1px solid #eee; font-family:'Baloo 2', sans-serif; font-size:0.9rem; }
-iframe { width:100%; height:250px; border:1px solid #eee; border-radius:10px; margin-top:10px; }
-button { width:100%; background:#ff6f61; color:white; border:none; padding:12px; border-radius:12px; margin-top:15px; font-size:1rem; cursor:pointer; }
-button:hover { background:#e55b4f; }
+section { background:#fff; padding:15px; border-radius:10px; margin-top:10px; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+h3 { margin-top:20px; font-weight:700; color:#444; }
+.table-wrapper { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:10px; min-width:600px; }
+th, td { border:1px solid #ddd; padding:8px; text-align:left; }
+th { background:#f5f5f5; font-weight:700; }
+.price { text-align:right; }
+textarea { width:100%; padding:10px; margin-top:6px; border-radius:8px; border:1px solid #ccc; font-family:'Noto Sans JP', sans-serif; font-size:0.9rem; }
+iframe { width:100%; height:250px; border:1px solid #ccc; border-radius:8px; margin-top:10px; }
+button { width:100%; background:#333; color:white; border:none; padding:12px; border-radius:8px; margin-top:15px; font-size:1rem; cursor:pointer; }
+button:hover { background:#555; }
 .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); justify-content:center; align-items:center; }
-.modal-content { background:#fff; padding:20px; border-radius:15px; max-width:90%; max-height:90%; overflow:auto; }
+.modal-content { background:#fff; padding:20px; border-radius:10px; max-width:90%; max-height:90%; overflow:auto; }
 .close { float:right; cursor:pointer; font-weight:bold; font-size:1.2rem; }
 </style>
 </head>
 <body>
 
 <header>
-<h1>🌟 Web設計ツール 🌟</h1>
+<h1>Web設計・見積・指示書</h1>
 <button class="price-btn" onclick="showPriceModal()">💰</button>
 </header>
 
@@ -40,25 +42,49 @@ button:hover { background:#e55b4f; }
 タイプ：ECサイト<br>
 ターゲット：一般ユーザー<br>
 技術構成：HTML, CSS, JavaScript, Python<br>
-デザイン：1カラム（スマホ中心）・丸文字フォント・ブルー系アクセント<br>
+デザイン：シンプル・高級感ある丸ゴシック系<br>
 サーバー：さくらサーバー<br>
 外部連携：ファイルメーカー<br>
 SNS連携：Instagram, LINE
 </p>
 
 <h3>🧩 機能一覧</h3>
+<div class="table-wrapper">
 <table>
 <tr><th>No</th><th>機能</th><th>概要</th></tr>
-<tr><td>1</td><td>ログイン</td><td>ログイン機能を実装</td></tr>
-<tr><td>2</td><td>検索</td><td>検索機能を実装</td></tr>
-<tr><td>3</td><td>登録・編集</td><td>登録・編集機能を実装</td></tr>
-<tr><td>4</td><td>コメント</td><td>コメント機能を実装</td></tr>
-<tr><td>5</td><td>通知</td><td>通知機能を実装</td></tr>
-<tr><td>6</td><td>分析</td><td>分析機能を実装</td></tr>
+<tr><td>1</td><td>ログイン</td><td>ユーザー認証、パスワード管理、セッション制御</td></tr>
+<tr><td>2</td><td>検索</td><td>商品検索、キーワード補完、カテゴリフィルタ</td></tr>
+<tr><td>3</td><td>登録・編集</td><td>商品登録・編集、画像アップロード、カテゴリ設定</td></tr>
+<tr><td>4</td><td>コメント</td><td>レビュー投稿、編集、削除機能、承認フロー</td></tr>
+<tr><td>5</td><td>通知</td><td>メール通知、アプリ通知、既読管理</td></tr>
+<tr><td>6</td><td>分析</td><td>アクセス解析、売上集計、グラフ表示</td></tr>
 </table>
+</div>
 
 <h3>🗂️ テーブル設計</h3>
-<p>ログイン_tbl, 検索_tbl, 登録・編集_tbl, コメント_tbl, 通知_tbl, 分析_tbl</p>
+<div class="table-wrapper">
+<table>
+<tr><th>テーブル名</th><th>項目名</th><th>型</th><th>備考</th></tr>
+<tr><td>ログイン_tbl</td><td>id</td><td>INT</td><td>主キー</td></tr>
+<tr><td>ログイン_tbl</td><td>username</td><td>VARCHAR(50)</td><td>ユーザーID</td></tr>
+<tr><td>ログイン_tbl</td><td>password</td><td>VARCHAR(255)</td><td>ハッシュ保存</td></tr>
+<tr><td>検索_tbl</td><td>id</td><td>INT</td><td>主キー</td></tr>
+<tr><td>検索_tbl</td><td>keyword</td><td>VARCHAR(100)</td><td>検索ワード</td></tr>
+<tr><td>検索_tbl</td><td>created_at</td><td>DATETIME</td><td>検索日時</td></tr>
+<tr><td>登録_tbl</td><td>id</td><td>INT</td><td>主キー</td></tr>
+<tr><td>登録_tbl</td><td>title</td><td>VARCHAR(100)</td><td>商品名</td></tr>
+<tr><td>登録_tbl</td><td>content</td><td>TEXT</td><td>商品説明</td></tr>
+<tr><td>コメント_tbl</td><td>id</td><td>INT</td><td>主キー</td></tr>
+<tr><td>コメント_tbl</td><td>user_id</td><td>INT</td><td>ユーザーID</td></tr>
+<tr><td>コメント_tbl</td><td>comment</td><td>TEXT</td><td>コメント内容</td></tr>
+<tr><td>通知_tbl</td><td>id</td><td>INT</td><td>主キー</td></tr>
+<tr><td>通知_tbl</td><td>target_user</td><td>INT</td><td>通知対象ユーザー</td></tr>
+<tr><td>通知_tbl</td><td>message</td><td>TEXT</td><td>通知内容</td></tr>
+<tr><td>分析_tbl</td><td>id</td><td>INT</td><td>主キー</td></tr>
+<tr><td>分析_tbl</td><td>metric_name</td><td>VARCHAR(50)</td><td>指標名</td></tr>
+<tr><td>分析_tbl</td><td>value</td><td>FLOAT</td><td>数値</td></tr>
+</table>
+</div>
 
 <h3>🎞️ 画面遷移図</h3>
 <div class="mermaid">
@@ -73,33 +99,33 @@ Home-->管理画面;
 </div>
 
 <h3>💰 見積明細</h3>
+<div class="table-wrapper">
 <table>
-<tr><th>項目</th><th>金額</th></tr>
-<tr><td>基本設計</td><td class="price">150,000</td></tr>
-<tr><td>機能追加 (6機能)</td><td class="price">180,000</td></tr>
-<tr><td>テーブル設計 (6テーブル)</td><td class="price">60,000</td></tr>
-<tr><th>合計（税抜）</th><th class="price">390,000</th></tr>
-<tr><th>合計（税込10%）</th><th class="price">429,000</th></tr>
+<tr><th>項目</th><th>詳細</th><th>金額</th></tr>
+<tr><td>基本設計</td><td>要件定義、画面構成設計、技術選定</td><td class="price">150,000</td></tr>
+<tr><td>機能追加</td><td>ログイン、検索、登録・編集、コメント、通知、分析（各30,000）</td><td class="price">180,000</td></tr>
+<tr><td>テーブル設計</td><td>6テーブル詳細設計（各10,000）</td><td class="price">60,000</td></tr>
+<tr><td>UI/UXデザイン</td><td>スマホ最適化、1カラム、カラー・フォント設定</td><td class="price">30,000</td></tr>
+<tr><td>サーバー設定</td><td>さくらサーバー初期設定</td><td class="price">10,000</td></tr>
+<tr><td>外部連携</td><td>ファイルメーカー連携設定</td><td class="price">20,000</td></tr>
+<tr><th>合計（税抜）</th><th></th><th class="price">450,000</th></tr>
+<tr><th>合計（税込10%）</th><th></th><th class="price">495,000</th></tr>
 </table>
+</div>
 <button onclick="downloadPDF()">PDF出力</button>
 
 <h3>📄 コード生成指示書</h3>
 <textarea readonly>
-AIへの指示：
-スマホ向け1カラムデザインで丸文字フォント「Baloo 2」を使用。タイトルは目立つカラー、大きさで表示。
-料金表はアイコンボタンで右上に表示。
-内容：
-- システム概要（目的:おまかせ、タイプ:ECサイト、ターゲット:一般ユーザー）
-- 技術構成: HTML, CSS, JavaScript, Python
-- 機能一覧: ログイン, 検索, 登録・編集, コメント, 通知, 分析
-- テーブル設計: ログイン_tbl, 検索_tbl, 登録・編集_tbl, コメント_tbl, 通知_tbl, 分析_tbl
-- 画面遷移図: トップページ→商品一覧→商品詳細→カート→会員登録→お問い合わせ→管理画面
-- 見積明細: 基本設計, 機能追加, テーブル設計、税込合計
-- コードプレビュー: HTML/CSS/JSを貼付けて表示可能
+スマホ向け1カラムデザイン、高級感あるシンプルデザイン。
+タイトルヘッダーは1行に収まる。
+機能一覧、テーブル設計、画面遷移図、見積明細を詳細まで含める。
+テーブルは横スクロール可能にする。
+使用フォント: Noto Sans JP
+見積明細: 基本設計、機能追加、テーブル設計、UI/UX、サーバー、外部連携
 </textarea>
 
 <h3>💻 コードプレビュー</h3>
-<textarea id="codePreview" placeholder="HTML/CSS/JSをここに貼付け"></textarea>
+<textarea id="codePreview" placeholder="HTML/CSS/JSを貼付け"></textarea>
 <iframe id="iframePreview"></iframe>
 <button onclick="showPreview()">プレビュー表示</button>
 </section>
